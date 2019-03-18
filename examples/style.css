@@ -1,0 +1,47 @@
+h1 {
+    font-family: 'Roboto', sans-serif;
+}
+
+.graph {
+    border: 10px solid black;
+    font: 10px sans-serif;
+}
+
+/*stroke, shape-rendering is a svg property */
+.axis line,
+.axis path{
+    fill:none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+
+.arrow{
+    stroke: #000;
+    stroke-width: 1.5px;
+}
+
+.outer,
+.inner {
+    shape-rendering:crispEdges;
+}
+
+.outer {
+    fill: none;
+    stroke: #000;
+}
+
+.inner {
+    fill: #ccc;
+    stroke: #000;
+    stroke-dasharray: 3, 4;
+}
+
+.bar {
+    padding: 100px;
+    margin: 100px;
+    fill: red;
+}
+
+.test {
+    border: 10px solid black;
+}
