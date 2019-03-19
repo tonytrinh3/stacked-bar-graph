@@ -1,19 +1,19 @@
 //WSEC Standard Design LPD (W/sf)
 const WSECDesign = [
-    {spaceType: "Conference/ Meeting/ Multipurpose", wattSF: 0.98},
-    {spaceType: "Convention center - Exhibit space", wattSF: 1.16},
-    {spaceType: "Corridor/ Transition", wattSF: 0.53},
-    {spaceType: "Dining area", wattSF: 0.86},
-    {spaceType: "Electrical/ Mechanical", wattSF: 0.76},
-    {spaceType: "Food preparation", wattSF: 0.79},
-    {spaceType: "Lobby", wattSF: 0.60},
-    {spaceType: "Restrooms", wattSF: 0.78},
-    {spaceType: "Stairs – Active", wattSF: 0.55}
+    {spaceType: "Conference/ Meeting/ Multipurpose", wattSF: 0.98, alt: 0.60 },
+    {spaceType: "Convention center - Exhibit space", wattSF: 1.16, alt: 0.60},
+    {spaceType: "Corridor/ Transition", wattSF: 0.53, alt: 0.60},
+    {spaceType: "Dining area", wattSF: 0.86, alt: 0.60},
+    {spaceType: "Electrical/ Mechanical", wattSF: 0.76, alt: 0.60},
+    {spaceType: "Food preparation", wattSF: 0.79, alt: 0.60},
+    {spaceType: "Lobby", wattSF: 0.60, alt: 0.60},
+    {spaceType: "Restrooms", wattSF: 0.78, alt: 0.60},
+    {spaceType: "Stairs – Active", wattSF: 0.55, alt: 0.60}
 ];
 //Option 2 Design LPD (W/sf)
 
-const columns = ['Space Type', "WSEC Standard Design \n LPD (W/sf)"]
-const selector = ['spaceType', 'wattSF']
+const columns = ['Space Type', "WSEC Standard Design \n LPD (W/sf)", "Option 2 Design \n LPD (W/sf)"]
+const selector = ['spaceType', 'wattSF', "alt"]
 
 const option2Design = [
     {spaceType: "Conference/ Meeting/ Multipurpose", wattSF: 0.60},
@@ -67,6 +67,8 @@ const HVACProposedDesign = [
     {HVACSystem: "Heating COP", code: "0.9"}
 ];
 
+
+
 const table = d3.select(".table").append('table');
 const thead = table.append('thead');
 const tbody = table.append('tbody');
@@ -75,8 +77,10 @@ thead.selectAll('th')
   .data(columns)
   .enter()
   .append('th')
+  .attr('class', function(d){ if (d === 'Space Type'){ return "spaceType"}})
   .text(function (d) {return d;})
 
+  /*
 //you are now adding all data to all tr
 const row = tbody.selectAll('tr')
   .data(WSECDesign)
@@ -91,4 +95,28 @@ const cells = row.selectAll('td')
   })
   .enter()
   .append('td')
+  .text(function(d) { return d.column})
+*/
+
+
+//you are now adding all data to all tr
+table.append('tbody')
+  .selectAll('tr')
+  .data(WSECDesign)
+  .enter()
+  .append('tr')
+  .selectAll('td')
+  .data( function (row) {
+    return selector.map(function (column){
+      return {column: column, value: row[column]}
+    })
+  })
+  .enter()
+  .append('td')
+  .attr( 'class', function (d) { if(d.column === "spaceType"){return 'spaceType' }})
   .text(function(d) { return d.value})
+
+
+
+
+//d3.select('.table').append('table').append('tr').selectAll('td').data

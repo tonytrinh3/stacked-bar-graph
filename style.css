@@ -29,3 +29,10 @@ tr:nth-child(even) {
   background-color: #dddddd;
 }
 
+tr {
+  text-align: center;
+}
+
+.spaceType {
+  text-align:right;
+}
