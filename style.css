@@ -1,4 +1,4 @@
-.graph svg { 
+.graph svg {
     border: 2px solid black ;
     font-family: 'Roboto', sans-serif;
 }
@@ -7,8 +7,25 @@
     font-family: 'Roboto', sans-serif;
 }
 
-h3{
+h3, h2 {
     font-family: 'Roboto', sans-serif;
     text-decoration: underline;
 
 }
+
+table, th, td {
+  border: 1px solid black;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+th {
+  padding: 10px 10px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+

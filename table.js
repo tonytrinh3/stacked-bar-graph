@@ -12,6 +12,9 @@ const WSECDesign = [
 ];
 //Option 2 Design LPD (W/sf)
 
+const columns = ['Space Type', "WSEC Standard Design \n LPD (W/sf)"]
+const selector = ['spaceType', 'wattSF']
+
 const option2Design = [
     {spaceType: "Conference/ Meeting/ Multipurpose", wattSF: 0.60},
     {spaceType: "Convention center - Exhibit space", wattSF: 0.60},
@@ -43,7 +46,7 @@ const envProposedDesign = [
     {envelope: "Window to Wall Ratio", code: "~100% on 3/4 floor \n 75% overall"},
     {envelope: "Shading Devices", code: "Vertical fins on the NW and SW facades \n Mature trees on the NE and SE sides"}
 ];
-//HVAC System	Washington Code	
+//HVAC System	Washington Code
 
 const HVACWashCode = [
     {HVACSystem: "Ventilation System", code: "DOAS"},
@@ -63,3 +66,29 @@ const HVACProposedDesign = [
     {HVACSystem: "Cooling COP", code: "6.0"},
     {HVACSystem: "Heating COP", code: "0.9"}
 ];
+
+const table = d3.select(".table").append('table');
+const thead = table.append('thead');
+const tbody = table.append('tbody');
+
+thead.selectAll('th')
+  .data(columns)
+  .enter()
+  .append('th')
+  .text(function (d) {return d;})
+
+//you are now adding all data to all tr
+const row = tbody.selectAll('tr')
+  .data(WSECDesign)
+  .enter()
+  .append('tr');
+
+const cells = row.selectAll('td')
+  .data( function (row) {
+    return selector.map(function (column){
+      return {column: column, value: row[column]}
+    })
+  })
+  .enter()
+  .append('td')
+  .text(function(d) { return d.value})
