@@ -33,6 +33,10 @@ tr {
   text-align: center;
 }
 
+.spaceType-table, .envelope-table, .HVAC-table {
+}
+
 .spaceType {
   text-align:right;
+  padding: 10px 10px;
 }
