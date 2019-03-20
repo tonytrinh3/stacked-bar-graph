@@ -12,8 +12,11 @@ const WSECDesign = [
 ];
 
 
-const columns = [['Space Type', "WSEC Standard Design \n LPD (W/sf)", "Option 2 Design \n LPD (W/sf)"],
-['Envelope', "Washington Code", "Proposed Design"]]
+const columnName = [
+    ['Space Type', "WSEC Standard Design \n LPD (W/sf)", "Option 2 Design\n LPD (W/sf)"],
+    ['Envelope', "Washington Code", "Proposed Design"],
+    ['HVAC System', "Washington Code", "Proposed Design"]
+];
 
 const selector = ['label', 'value', "alt"]
 /*
@@ -76,37 +79,52 @@ const HVACProposedDesign = [
     {HVACSystem: "Cooling COP", value: "6.0"},
     {HVACSystem: "Heating COP", value: "0.9"}
 ];
-
 */
 
-const table = d3.select(".spaceType-table").append('table');
-const thead = table.append('thead');
-const tbody = table.append('tbody');
+const tableInput = [
+    {nameTable:"space-Type", valueTable: WSECDesign}, 
+    {nameTable: "envelope", valueTable: envWashingtonvalue}, 
+    {nameTable: "HVAC", valueTable: HVACWashvalue}
+];
 
-thead.selectAll('th')
-  .data(columns[0])
-  .enter()
-  .append('th')
-  .attr('class', function(d){ if (d[0]){ return "spaceType"}})
-  .text(function (d) {return d;})
+tableInput.map(function(d,i){
+  const table = d3.select(".table")
+    .append('div')
+    .attr('class', `js-site-${d.nameTable}`)
+    .append('table');
 
 
-//you are now adding all data to all tr
-const row = tbody.selectAll('tr')
-  .data(WSECDesign)
-  .enter()
-  .append('tr');
+  const thead = table.append('thead');
+  const tbody = table.append('tbody');
 
-const cells = row.selectAll('td')
-  .data( function (row) {
-    return selector.map(function (column){
-      return {column: column, value: row[column]}
+  thead.selectAll('th')
+    .data(columnName[i])
+    .enter()
+    .append('th')
+    .attr('class', function(d,i){ if (i ===0 ){ return "label"}})
+    .text(function (d) {return d;})
+
+
+  //you are now adding all data to all tr
+  const row = tbody.selectAll('tr')
+    .data(d.valueTable)
+    .enter()
+    .append('tr');
+
+  const cells = row.selectAll('td')
+    .data( function (row) {
+      return selector.map(function (column){
+        return {column: column, value: row[column]}
+      })
     })
-  })
-  .enter()
-  .append('td')
-  .attr( 'class', function (d) { if(d.column === "label"){return 'spaceType' }})
-  .text(function(d) { return d.value})
+    .enter()
+    .append('td')
+    .attr( 'class', function (d,i) { if (i ===0 ){ return "label"}})
+    .text(function(d) { return d.value})
+
+
+})
+
 
 
 /*

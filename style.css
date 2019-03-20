@@ -5,6 +5,7 @@
 
 .paper-body{
     font-family: 'Roboto', sans-serif;
+    margin: 5% 15%;
 }
 
 h3, h2 {
@@ -19,6 +20,9 @@ table, th, td {
 
 table {
   border-collapse: collapse;
+  table-layout: auto;
+  margin: 10px;
+  width: 100%;
 }
 
 th {
@@ -33,10 +37,13 @@ tr {
   text-align: center;
 }
 
-.spaceType-table, .envelope-table, .HVAC-table {
+td{
+  width:25%;
 }
 
-.spaceType {
+
+.label {
   text-align:right;
   padding: 10px 10px;
 }
+
