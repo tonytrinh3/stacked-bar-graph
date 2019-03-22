@@ -26,7 +26,7 @@ var y = d3.scale.linear()
  
 var color = d3.scale.category20();
 
-//this shows the actualy text of the scale. 
+//this shows the actualy text of the scale.
 var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
@@ -44,7 +44,7 @@ var svg = d3.select(".graph").append("svg")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
  
 //transforms loadData into data that we can read to make graph
-const dataIntermediate = loadData.map(function(d) { 
+const dataIntermediate = loadData.map(function(d) {
     return {equipment: d.equipment, value: [{x: 0, y: d.energy}], color: d.color}
 })
 
@@ -60,9 +60,9 @@ x.domain(dataStackLayout[0].value.map(function (d) {
     return d.x;
 }));
 
- //nice rounds numbers well. d3 function only 
+ //nice rounds numbers well. d3 function only
  //https://d3indepth.com/scales/
- //y0 within dataStackLayout is like "where you are starting on the y axis", y is then how much more you are going 
+ //y0 within dataStackLayout is like "where you are starting on the y axis", y is then how much more you are going
 y.domain([0,
     d3.max(dataStackLayout[dataStackLayout.length - 1].value,
             function (d) { return d.y0 + d.y;})
@@ -125,26 +125,51 @@ legend.append("text")
   .attr("y", 9)
   .attr("dy", ".35em")
   .style("text-anchor", "start")
-  .text(function(d) { 
+  .text(function(d) {
         return d.equipment
     }
   )
   .style('margin', '200px')
 
 
-  const columnTable = ['equipment','energy','alt'];
-  d3.select('.results-table')
-  .append('table')
-  .selectAll('tr')
+const columnTable = ['equipment','energy','alt'];
+const columnLabel = ['Space Type', 'WSEC Standard Design \n DOAS with Fan Coil', 'Option 2 Design \n DOAS with Radiant'];
+const unitLabel = ['Detailed Breakdown', 'kBtu/sf', 'kBtu/sf'];
+  
+ const table =  d3.select('.results-table')
+  .append('table');
+  
+const thead = table.append('thead');
+const units = table.append('thead');
+const tbody = table.append('tbody');
+
+thead.selectAll('th')
+  .data(columnLabel)
+  .enter()
+  .append('th')
+  .attr('class', 'header-table')
+  .text(function(d){return d});
+  
+  
+units.selectAll('th')
+  .data(unitLabel)
+  .enter()
+  .append('th')
+  .attr('class','units-table')
+  .text(function(d){return d});
+
+
+  
+const row = tbody.selectAll('tr')
   .data(loadData)
   .enter()
-  .append('tr')
-  .selectAll('td')
-  .data(function(d){
-    return columnTable.map(function(d){
-        return {column: d, value: d[d]}
+  .append('tr');
+
+const cell = row.selectAll('td')
+  .data(function(row){
+    return columnTable.map(function(column){
+      return {column: column, value:row[column]}
     })
-      
   })
   .enter()
   .append('td')

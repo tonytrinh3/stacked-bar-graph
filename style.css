@@ -1,8 +1,3 @@
-.graph svg {
-    border: 2px solid black ;
-    font-family: 'Roboto', sans-serif;
-}
-
 .paper-body{
     font-family: 'Roboto', sans-serif;
     margin: 5% 15%;
@@ -21,12 +16,13 @@ table, th, td {
 table {
   border-collapse: collapse;
   table-layout: auto;
-  margin: 10px;
-  width: 100%;
+  margin: 10px auto 0 auto;
+  width: 60%;
 }
 
 th {
   padding: 10px 10px;
+  background-color: #33ccff;
 }
 
 tr:nth-child(even) {
@@ -41,9 +37,22 @@ td{
   width:25%;
 }
 
-
 .label {
-  text-align:right;
+  text-align:left;
   padding: 10px 10px;
+  width:15%;
 }
 
+/*for the graph */
+.graph svg {
+    border: 2px solid black ;
+    font-family: 'Roboto', sans-serif;
+    margin: 10px 20%;
+}
+
+/*for the table below the graph*/
+
+.units-table{
+  background-color: #ccccb3;
+  padding: 1px 1px;
+}
