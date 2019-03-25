@@ -15,7 +15,9 @@
 
 const loadData = [
   {design: "Design 1", plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
-  {design: "Design 2", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 }
+  {design: "Design 2", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 },
+  {design: "Design 3", plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
+  {design: "Design 4", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 }
 ];
 
 
