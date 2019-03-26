@@ -14,18 +14,37 @@
 
 
 const loadData = [
-  {design: 'Design 1', plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
-  {design: 'Design 2', plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 },
-  {design: "Design 3", plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
-  {design: "Design 4", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 }
+  {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 0.0, cooking: 1.2 },
+  {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 },
+  {design: "Option 2", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0.0, cooking: 1.2 },
+  {design: "Option 3", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
   
 ];
 
 
-const xLabel = ['Space Type', 'WSEC Standard Design \n DOAS with Fan Coil', 'Option 2 Design \n DOAS with Radiant'];
-const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection'];
-const legendLabel = ['Plug Loads', 'Lighting', 'Heating', 'Hot Water', "Cooling", "Pumps", 'Fans', 'Heat Rejection'];
-const color = ["#6600ff", "#aaff00", "#ff5500","#990000","#0099ff","#b3b3cc","#595959","#558000"];
+const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
+
+const legendLabel = [
+  'Plug Loads',
+  'Lighting',
+  'Heating',
+  'Hot Water',
+  "Cooling",
+  "Pumps",
+  'Fans',
+  'Heat Rejection',
+  'Cooking'];
+  
+const color = [
+  "rgb(78,71,157)",
+  "rgb(254,182,38)",
+  "rgb(194,88,40)",
+  "rgb(145,66,30)",
+  "rgb(21,141,189)",
+  "rgb(103,113,48)",
+  "rgb(163,175,51)",
+  "rgb(16,106,142)",
+  'rgb(39,35,78)'];
 
 const margin = {top: 20, right: 50, bottom: 30, left: 50},
         width = 800 - margin.left - margin.right,
@@ -37,7 +56,6 @@ const x = d3.scale.ordinal()
 const y = d3.scale.linear()
         .rangeRound([height, 0]);
  
-// const color = d3.scale.category20();
 
 //this shows the actualy text of the scale.
 const xAxis = d3.svg.axis()
@@ -57,34 +75,16 @@ const svg = d3.select(".graph").append("svg")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
  
 //transforms loadData into data that we can read to make graph
-// const dataIntermediate = valueChoose.map(function(c) { 
-//     return  loadData.map( function(d) {
-//       return {equipment: d.equipment, value: [{x: c , y: d[c]}], color: d.color}
-//       })
-//   });
 
-const dataIntermediate = valueChoose.map(function(c) { 
+const dataIntermediate = valueChoose.map(function(c) {
   return  loadData.map( function(d) {
     return {x: d.design, y: d[c]}
     })
 });
 
 
-// const stack = d3.layout.stack()
-//     .values(function(d) { return d.value; });
-
-// const dataStackLayout = dataIntermediate.map(function(d){
-//       return stack(d);
-// });
-
-// const dataStackLayout = stack(dataIntermediate[1])
-
 const dataStackLayout = d3.layout.stack()(dataIntermediate);
  
-// x.domain(dataStackLayout[0].value.map(function (d) {
-//     return d.x;
-// }));
-
 x.domain(dataStackLayout[0].map(function (d) {
   return d.x;
 }));
@@ -92,11 +92,7 @@ x.domain(dataStackLayout[0].map(function (d) {
  //nice rounds numbers well. d3 function only
  //https://d3indepth.com/scales/
  //y0 within dataStackLayout is like "where you are starting on the y axis", y is then how much more you are going
-// y.domain([0,
-//     d3.max(dataStackLayout[dataStackLayout.length - 1].value,
-//             function (d) { return d.y0 + d.y;})
-//     ])
-//   .nice();
+
 
   y.domain([0,
     d3.max(dataStackLayout[dataStackLayout.length - 1],
@@ -167,45 +163,71 @@ legend.append("text")
   .style('margin', '200px')
 
 
-// const columnTable = ['equipment','energy','alt'];
-// const columnLabel = xLabel;
-// const unitLabel = ['Detailed Breakdown', 'kBtu/sf', 'kBtu/sf'];
-  
-//  const table =  d3.select('.results-table')
-//   .append('table');
-  
-// const thead = table.append('thead');
-// const units = table.append('thead');
-// const tbody = table.append('tbody');
 
-// thead.selectAll('th')
-//   .data(columnLabel)
-//   .enter()
-//   .append('th')
-//   .attr('class', 'header-table')
-//   .text(function(d){return d});
-  
-  
-// units.selectAll('th')
-//   .data(unitLabel)
-//   .enter()
-//   .append('th')
-//   .attr('class','units-table')
-//   .text(function(d){return d});
+const columnLabel = ['Equipment','Baseline', 'Option 1','Option 2','Option 3'];
+const unitLabel = ['Detailed Breakdown', 'kBtu/sf', 'kBtu/sf', 'kBtu/sf', 'kBtu/sf'];
 
 
-  
-// const row = tbody.selectAll('tr')
-//   .data(loadData)
-//   .enter()
-//   .append('tr');
+const loadDataTable = [
+    {equipment: "Plug Loads", baseLine: 12.5, option1: 12.5, option2: 12.5, option3: 12.5 },
+    {equipment: "Lighting", baseLine: 5.8, option1: 3.8, option2: 3.8, option3: 3.8 },
+    {equipment: "Heating", baseLine: 8.1, option1: 4.1, option2: 4, option3: 4  },
+    {equipment: "Hot Water", baseLine: 0.8, option1: 0.8, option2: 0.8, option3: 0.8 },
+    {equipment: "Cooling", baseLine: 4.3, option1: 1.9, option2: 1.9, option3: 1.9 },
+    {equipment: "Pumps", baseLine: 0.6, option1: 0.6, option2: 0.6, option3: 0.6 },
+    {equipment: "Fans", baseLine: 4.4, option1: 3.3, option2: 3.3, option3: 3.3 },
+    {equipment: "Heat Rejection", baseLine: 0, option1: 0, option2: 0, option3: 0 },
+    {equipment: "Cooking", baseLine: 1.2, option1: 1.2, option2: 1.2, option3: 1.2}
+];
 
-// const cell = row.selectAll('td')
-//   .data(function(row){
-//     return columnTable.map(function(column){
-//       return {column: column, value:row[column]}
-//     })
+const choose = ['equipment','baseLine','option1','option2','option3'];
+  
+const table =  d3.select('.results-table')
+  .append('table');
+  
+const thead = table.append('thead');
+const units = table.append('thead');
+const tbody = table.append('tbody');
+
+thead.selectAll('th')
+  .data(columnLabel)
+  .enter()
+  .append('th')
+  .attr('class', 'header-table')
+  .text(function(d){return d});
+  
+  
+units.selectAll('th')
+  .data(unitLabel)
+  .enter()
+  .append('th')
+  .attr('class','units-table')
+  .text(function(d){return d});
+
+
+//i have a feeling that you have to refactor the data to be usable with tables
+//because the table code is based on rows, so the each {} object should be refactor based on rows and not by columns
+
+// const dataColumnIntermediate = valueChoose.map(function(c){
+//   return loadData.map(function(d,i){
+//     return {equipment: legendLabel[i],
 //   })
-//   .enter()
-//   .append('td')
-//   .text(function(d){ return d.value;});
+// })
+
+
+
+  
+const row = tbody.selectAll('tr')
+  .data(loadDataTable)
+  .enter()
+  .append('tr');
+
+const cell = row.selectAll('td')
+  .data(function(row){
+    return choose.map(function(column){
+      return {column: column, value:row[column]}
+    })
+  })
+  .enter()
+  .append('td')
+  .text(function(d){ return d.value;});

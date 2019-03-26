@@ -31,10 +31,11 @@ tr:nth-child(even) {
 
 tr {
   text-align: center;
+  width: 100%;
 }
 
 td{
-  width:25%;
+  width:20%;
 }
 
 .label {
@@ -48,13 +49,13 @@ td{
 .graph svg {
     border: 2px solid black ;
     font-family: 'Roboto', sans-serif;
-    margin: 10px 30%;
+    margin: 10px 10%;
 }
 
 
 /*tick is probably a class auto filled by d3 when using d3 function to create axis*/
 .x-axis .tick {
-  fill: red;
+  fill: black;
   overflow: auto;
   
 }
