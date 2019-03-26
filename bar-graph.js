@@ -14,18 +14,21 @@
 
 
 const loadData = [
-  {design: "Design 1", plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
-  {design: "Design 2", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 },
+  {design: 'Design 1', plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
+  {design: 'Design 2', plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 },
   {design: "Design 3", plugLoads:13.2, lighting: 8, heating: 3.8, hotWater: 2.4, cooling: 1.4, pumps: 0.4, fans: 2.1, heatRejection: 0.5 },
   {design: "Design 4", plugLoads:13.2, lighting: 4.5, heating: 7.3, hotWater: 2.4, cooling: 0, pumps: 1.7, fans: 0.2, heatRejection: 1 }
+  
 ];
 
 
 const xLabel = ['Space Type', 'WSEC Standard Design \n DOAS with Fan Coil', 'Option 2 Design \n DOAS with Radiant'];
 const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection'];
+const legendLabel = ['Plug Loads', 'Lighting', 'Heating', 'Hot Water', "Cooling", "Pumps", 'Fans', 'Heat Rejection'];
+const color = ["#6600ff", "#aaff00", "#ff5500","#990000","#0099ff","#b3b3cc","#595959","#558000"];
 
 const margin = {top: 20, right: 50, bottom: 30, left: 50},
-        width = 400 - margin.left - margin.right,
+        width = 800 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
  
 const x = d3.scale.ordinal()
@@ -34,7 +37,7 @@ const x = d3.scale.ordinal()
 const y = d3.scale.linear()
         .rangeRound([height, 0]);
  
-const color = d3.scale.category20();
+// const color = d3.scale.category20();
 
 //this shows the actualy text of the scale.
 const xAxis = d3.svg.axis()
@@ -107,7 +110,7 @@ const layer = svg.selectAll(".stack")
         .attr("class", "stack")
         //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
         .style("fill", function (d,i) {
-            return color(i);
+            return color[i];
         });
  
 layer.selectAll("rect")
@@ -129,19 +132,19 @@ layer.selectAll("rect")
  
 svg.append("g")
         .attr("class", "x-axis")
-        .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(-6," + height + ")")
         .call(xAxis);
 
 svg.append("g")
         .attr("class", "y-axis")
-        .attr("transform", "translate(0)")
+        .attr("transform", "translate(0,0)")
         .call(yAxis);
 
 
 
 // Draw legend
 const legend = svg.selectAll(".legend")
-  .data(valueChoose)
+  .data(legendLabel)
   .enter().append("g")
   .attr("class", "legend")
   .attr("transform", function(d, i) { return "translate(30," + i * 19 + ")"; });
@@ -150,7 +153,7 @@ legend.append("rect")
   .attr("x", width - 18)
   .attr("width", 18)
   .attr("height", 18)
-  .style("fill", function(d,i) {return color(i)});
+  .style("fill", function(d,i) {return color[i]});
  
 legend.append("text")
   .attr("x", width + 5)

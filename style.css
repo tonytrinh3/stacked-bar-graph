@@ -44,12 +44,27 @@ td{
 }
 
 /*for the graph */
+
 .graph svg {
     border: 2px solid black ;
     font-family: 'Roboto', sans-serif;
-    margin: 10px 20%;
+    margin: 10px 30%;
 }
 
+
+/*tick is probably a class auto filled by d3 when using d3 function to create axis*/
+.x-axis .tick {
+  fill: red;
+  overflow: auto;
+  
+}
+
+/*text color needs to be fill bc it is svg?*/
+.legend{
+  fill: black;
+  display: inline-block;
+
+}
 /*for the table below the graph*/
 
 .units-table{
