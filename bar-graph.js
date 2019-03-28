@@ -124,7 +124,19 @@ layer.selectAll("rect")
         .attr("height", function (d) {
             return y(d.y0) - y(d.y + d.y0);
         })
-        .attr("width", x.rangeBand());
+        .attr("width", x.rangeBand())
+        .on('mouseover', function(){
+          tooltip.style('display',null);
+        })
+        .on('mouseout',function(){
+          tooltip.style('display','none');
+        })
+        .on('mousemove', function(d){
+          const xPosition = d3.mouse(this)[0]-15;
+          const yPosition = d3.mouse(this)[1]-25;
+          tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
+          tooltip.select('text').text(d.y);
+        })
  
 svg.append("g")
         .attr("class", "x-axis")
@@ -161,6 +173,26 @@ legend.append("text")
     }
   )
   .style('margin', '200px')
+  
+  
+// Prep the tooltip bits, initial display is hidden
+const tooltip = svg.append('g')
+  .attr('class', 'tooltip')
+  .style('display','none');
+  
+tooltip.append('rect')
+  .attr('width', 30)
+  .attr('height',20)
+  .attr('fill','white')
+  .style('opacity',0.5);
+  
+tooltip.append('text')
+  .attr('x', 15)
+  .attr('dy','1.2em')
+  .style('text-anchor','middle')
+  .attr('font-size','12px')
+  .attr('font-weight','bold');
+
 
 
 
