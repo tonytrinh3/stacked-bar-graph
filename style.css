@@ -72,3 +72,7 @@ td{
   background-color: #ccccb3;
   padding: 1px 1px;
 }
+
+.table-total{
+  font-weight: bold;
+}

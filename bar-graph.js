@@ -209,7 +209,8 @@ const loadDataTable = [
     {equipment: "Pumps", baseLine: 0.6, option1: 0.6, option2: 0.6, option3: 0.6 },
     {equipment: "Fans", baseLine: 4.4, option1: 3.3, option2: 3.3, option3: 3.3 },
     {equipment: "Heat Rejection", baseLine: 0, option1: 0, option2: 0, option3: 0 },
-    {equipment: "Cooking", baseLine: 1.2, option1: 1.2, option2: 1.2, option3: 1.2}
+    {equipment: "Cooking", baseLine: 1.2, option1: 1.2, option2: 1.2, option3: 1.2},
+    {equipment: 'Total', baseLine: 37.7, option1: 28.2, option2: 28.2, option3: 28.2}
 ];
 
 const choose = ['equipment','baseLine','option1','option2','option3'];
@@ -252,7 +253,12 @@ units.selectAll('th')
 const row = tbody.selectAll('tr')
   .data(loadDataTable)
   .enter()
-  .append('tr');
+  .append('tr')
+  .attr('class', function(d,i){
+    if (i === loadDataTable.length-1){
+      return 'table-total';
+    }
+  });
 
 const cell = row.selectAll('td')
   .data(function(row){
@@ -262,4 +268,5 @@ const cell = row.selectAll('td')
   })
   .enter()
   .append('td')
+
   .text(function(d){ return d.value;});
