@@ -1,8 +1,10 @@
 .paper-body{
     font-family: 'Roboto', sans-serif;
     margin: 5% 15%;
+    color: #3f3f3f;
 }
 
+/*#afbd21 is lime green  #0078a0 is that blue*/
 h3, h2 {
     font-family: 'Roboto', sans-serif;
     text-decoration: underline;

@@ -38,13 +38,13 @@ const legendLabel = [
 const color = [
   "rgb(78,71,157)",
   "rgb(254,182,38)",
-  "rgb(194,88,40)",
+  "rgb(175, 146, 157)",
   "rgb(145,66,30)",
-  "rgb(21,141,189)",
+  "rgb(23, 190, 187)",
   "rgb(103,113,48)",
   "rgb(163,175,51)",
   "rgb(16,106,142)",
-  'rgb(39,35,78)'];
+  'rgb(13, 50, 77)'];
 
 const margin = {top: 20, right: 50, bottom: 30, left: 50},
         width = 800 - margin.left - margin.right,
