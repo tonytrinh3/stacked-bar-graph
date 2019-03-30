@@ -14,37 +14,49 @@
 
 
 const loadData = [
-  {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 0.0, cooking: 1.2 },
+  {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 5, cooking: 1.2 },
   {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 },
   {design: "Option 2", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0.0, cooking: 1.2 },
   {design: "Option 3", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
   
 ];
 
+// const loadData = [
+//   {design: 'Baseline', hotWater: 0.8,heating: 8.1,heatRejection: 5, cooking: 1.2,lighting: 5.8,  plugLoads:12.5,pumps: 0.6, fans: 4.4,cooling: 4.3  },
+//   {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
+  
+// ];
 
-const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
+//change this will change order?
+// const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
+const valueChoose = ['hotWater', 'heating','heatRejection','cooking', 'lighting','plugLoads','pumps','fans','cooling' ];
+
+// const legendLabel = [
+//   {label: 'Plug Loads', color: 'rgb(78,71,157)'},
+//   {label: 'Lighting', color: 'rgb(254,182,38)'},
+//   {label: 'Heating', color: 'rgb(175, 146, 157)'},
+//   {label: 'Hot Water', color: 'rgb(145,66,30)'},
+//   {label: "Cooling", color: 'rgb(129, 164, 205)'},
+//   {label: "Pumps", color: 'rgb(103,113,48)'},
+//   {label: 'Fans', color: 'rgb(175, 189, 33)'},
+//   {label: 'Heat Rejection', color: 'rgb(62, 124, 177)'},
+//   {label: 'Cooking', color: 'rgb(0, 120, 160)'}
+// ];
 
 const legendLabel = [
-  'Plug Loads',
-  'Lighting',
-  'Heating',
-  'Hot Water',
-  "Cooling",
-  "Pumps",
-  'Fans',
-  'Heat Rejection',
-  'Cooking'];
+  {label: 'Hot Water', color: '#BF3100'},
+  {label: 'Heating', color: '#D76A03'},
+  {label: 'Heat Rejection', color: '#E57C04'},
+  {label: 'Cooking', color: '#EC9F05'},
+  {label: 'Lighting', color: '#F5BB00'},
+  {label: 'Plug Loads', color: '#FEFCAD'},
+  {label: "Pumps", color: '#AFBD21'},
+  {label: 'Fans', color: '#DBD053'},
+  {label: "Cooling", color: 'rgb(129, 164, 205)'}
+];
   
-const color = [
-  "rgb(78,71,157)",
-  "rgb(254,182,38)",
-  "rgb(175, 146, 157)",
-  "rgb(145,66,30)",
-  "rgb(23, 190, 187)",
-  "rgb(103,113,48)",
-  "rgb(163,175,51)",
-  "rgb(16,106,142)",
-  'rgb(13, 50, 77)'];
+  
+
 
 const margin = {top: 20, right: 50, bottom: 30, left: 50},
         width = 800 - margin.left - margin.right,
@@ -106,7 +118,7 @@ const layer = svg.selectAll(".stack")
         .attr("class", "stack")
         //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
         .style("fill", function (d,i) {
-            return color[i];
+            return legendLabel[i].color;
         });
  
 layer.selectAll("rect")
@@ -135,7 +147,7 @@ layer.selectAll("rect")
           const xPosition = d3.mouse(this)[0]-15;
           const yPosition = d3.mouse(this)[1]-25;
           tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
-          tooltip.select('text').text(d.y);
+          tooltip.select('text').text(`${d.x}: ${d.y}`);
         })
  
 svg.append("g")
@@ -161,7 +173,7 @@ legend.append("rect")
   .attr("x", width - 18)
   .attr("width", 18)
   .attr("height", 18)
-  .style("fill", function(d,i) {return color[i]});
+  .style("fill", function(d,i) {return legendLabel[i].color});
  
 legend.append("text")
   .attr("x", width + 5)
@@ -169,7 +181,7 @@ legend.append("text")
   .attr("dy", ".35em")
   .style("text-anchor", "start")
   .text(function(d) {
-        return d
+        return d.label
     }
   )
   .style('margin', '200px')
