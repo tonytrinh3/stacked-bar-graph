@@ -29,7 +29,7 @@ const loadData = [
 
 //change this will change order?
 // const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
-const valueChoose = ['hotWater', 'heating','heatRejection','cooking', 'lighting','plugLoads','pumps','fans','cooling' ];
+const valueChoose = ['hotWater', 'heating','heatRejection', 'lighting','plugLoads','pumps','cooling' ,'fans','cooking'];
 
 // const legendLabel = [
 //   {label: 'Plug Loads', color: 'rgb(78,71,157)'},
@@ -43,17 +43,30 @@ const valueChoose = ['hotWater', 'heating','heatRejection','cooking', 'lighting'
 //   {label: 'Cooking', color: 'rgb(0, 120, 160)'}
 // ];
 
+// const legendLabel = [
+//   {label: 'Hot Water', color: '#BF3100'},
+//   {label: 'Heating', color: '#D76A03'},
+//   {label: 'Heat Rejection', color: '#E57C04'},
+//   {label: 'Cooking', color: '#EC9F05'},
+//   {label: 'Lighting', color: '#F5BB00'},
+//   {label: 'Plug Loads', color: '#FEFCAD'},
+//   {label: "Pumps", color: '#AFBD21'},
+//   {label: 'Fans', color: '#DBD053'},
+//   {label: "Cooling", color: 'rgb(129, 164, 205)'}
+// ];
+
 const legendLabel = [
-  {label: 'Hot Water', color: '#BF3100'},
-  {label: 'Heating', color: '#D76A03'},
-  {label: 'Heat Rejection', color: '#E57C04'},
-  {label: 'Cooking', color: '#EC9F05'},
-  {label: 'Lighting', color: '#F5BB00'},
-  {label: 'Plug Loads', color: '#FEFCAD'},
-  {label: "Pumps", color: '#AFBD21'},
-  {label: 'Fans', color: '#DBD053'},
-  {label: "Cooling", color: 'rgb(129, 164, 205)'}
+  {label: 'Hot Water', color: '#E53935'},
+  {label: 'Heating', color: '#FB8C00'},
+  {label: 'Heat Rejection', color: '#FFB300'},
+  {label: 'Lighting', color: '#FDD835'},
+  {label: 'Plug Loads', color: '#7CB342'},
+  {label: "Pumps", color: '#00897B'},
+  {label: "Cooling", color: '#039BE5'},
+  {label: 'Fans', color: '#3949AB'},
+  {label: 'Cooking', color: '#8E24AA'}
 ];
+  
   
   
 
@@ -193,15 +206,15 @@ const tooltip = svg.append('g')
   .style('display','none');
   
 tooltip.append('rect')
-  .attr('width', 30)
+  .attr('width', 90)
   .attr('height',20)
   .attr('fill','white')
   .style('opacity',0.5);
   
 tooltip.append('text')
-  .attr('x', 15)
+  .attr('x', 8)
   .attr('dy','1.2em')
-  .style('text-anchor','middle')
+  .style('text-anchor','left')
   .attr('font-size','12px')
   .attr('font-weight','bold');
 
@@ -224,6 +237,14 @@ const loadDataTable = [
     {equipment: "Cooking", baseLine: 1.2, option1: 1.2, option2: 1.2, option3: 1.2},
     {equipment: 'Total', baseLine: 37.7, option1: 28.2, option2: 28.2, option3: 28.2}
 ];
+
+// const loadData = [
+//   {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 5, cooking: 1.2 },
+//   {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 },
+//   {design: "Option 2", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0.0, cooking: 1.2 },
+//   {design: "Option 3", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
+  
+// ];
 
 const choose = ['equipment','baseLine','option1','option2','option3'];
   

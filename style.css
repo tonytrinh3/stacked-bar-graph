@@ -11,30 +11,39 @@ h3, h2 {
 
 }
 
-table, th, td {
-  border: 1px solid black;
-}
+
 
 table {
   border-collapse: collapse;
   table-layout: auto;
-  margin: 10px auto 0 auto;
+  margin: 20px auto 0 auto;
   width: 60%;
+
 }
 
 th {
   padding: 10px 10px;
-  background-color: #33ccff;
+  opacity: 0.8;
+  border-bottom: 3px solid #BDBDBD;
 }
 
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
+
 
 tr {
   text-align: center;
   width: 100%;
 }
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #BDBDBD;
+}
+
+
+/* tr:hover{
+  background-color: #BDBDBD;
+  color: white;
+} */
+
 
 td{
   width:20%;
@@ -49,9 +58,9 @@ td{
 /*for the graph */
 
 .graph svg {
-    border: 2px solid black ;
     font-family: 'Roboto', sans-serif;
-    margin: 10px 10%;
+    margin: 20px auto;
+    display: block;
 }
 
 
@@ -71,8 +80,10 @@ td{
 /*for the table below the graph*/
 
 .units-table{
-  background-color: #ccccb3;
+  border-bottom: none;
   padding: 1px 1px;
+  text-decoration: underline ;
+
 }
 
 .table-total{
