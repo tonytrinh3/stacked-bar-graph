@@ -1,41 +1,22 @@
  //http://www.adeveloperdiary.com/d3-js/create-stacked-bar-chart-using-d3-js/
     //https://d3-wiki.readthedocs.io/zh_CN/master/Stack-Layout/
 
+// const loadData = [
+//   {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 5, cooking: 1.2 },
+//   {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 },
+//   {design: "Option 2", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0.0, cooking: 1.2 },
+//   {design: "Option 3", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
+  
+// ];
+
 const loadData = [
   {design: 'Baseline', plugLoads:12.5, lighting: 5.8, heating: 8.1, hotWater: 0.8, cooling: 4.3, pumps: 0.6, fans: 4.4, heatRejection: 5, cooking: 1.2 },
-  {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 },
-  {design: "Option 2", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0.0, cooking: 1.2 },
-  {design: "Option 3", plugLoads:12.5, lighting: 3.8, heating: 4, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
-  
+  {design: 'Option 1', plugLoads:12.5, lighting: 3.8, heating: 4.1, hotWater: 0.8, cooling: 1.9, pumps: 0.6, fans: 3.3, heatRejection: 0, cooking: 1.2 }
 ];
 
 //change this will change order?
-// const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
 const valueChoose = ['hotWater', 'heating','heatRejection', 'lighting','plugLoads','pumps','cooling' ,'fans','cooking'];
 
-// const legendLabel = [
-//   {label: 'Plug Loads', color: 'rgb(78,71,157)'},
-//   {label: 'Lighting', color: 'rgb(254,182,38)'},
-//   {label: 'Heating', color: 'rgb(175, 146, 157)'},
-//   {label: 'Hot Water', color: 'rgb(145,66,30)'},
-//   {label: "Cooling", color: 'rgb(129, 164, 205)'},
-//   {label: "Pumps", color: 'rgb(103,113,48)'},
-//   {label: 'Fans', color: 'rgb(175, 189, 33)'},
-//   {label: 'Heat Rejection', color: 'rgb(62, 124, 177)'},
-//   {label: 'Cooking', color: 'rgb(0, 120, 160)'}
-// ];
-
-// const legendLabel = [
-//   {label: 'Hot Water', color: '#BF3100'},
-//   {label: 'Heating', color: '#D76A03'},
-//   {label: 'Heat Rejection', color: '#E57C04'},
-//   {label: 'Cooking', color: '#EC9F05'},
-//   {label: 'Lighting', color: '#F5BB00'},
-//   {label: 'Plug Loads', color: '#FEFCAD'},
-//   {label: "Pumps", color: '#AFBD21'},
-//   {label: 'Fans', color: '#DBD053'},
-//   {label: "Cooling", color: 'rgb(129, 164, 205)'}
-// ];
 
 const legendLabel = [
   {label: 'Hot Water', color: '#E53935'},
@@ -63,48 +44,106 @@ const svg = d3.select(".graph").append("svg")
 
 //transforms loadData into data that we can read to make graph
 
-const dataIntermediate = valueChoose.map(function(c) {
-  return  loadData.map( function(d) {
-    return {x: d.design, y: d[c]}
-    })
-});
+// const dataIntermediate = valueChoose.map(function(c) {
+//   return  loadData.map( function(d) {
+//     return {x: d.design, y: d[c]}
+//     })
+// });
 
 
-const dataStackLayout = d3.layout.stack()(dataIntermediate);
 
-const x = d3.scale.ordinal()
-  .rangeRoundBands([0, width], .35);
+
+const stack = d3.stack()
+  .keys(valueChoose)
+  .order(d3.stackOrderNone)
+  .offset(d3.stackOffsetNone);
+
+const dataStackLayout = stack(loadData);
+
+// const x = d3.scale.ordinal()
+//   .rangeRoundBands([0, width], .35);
  
   //d3.scaleLinear() in v4 and v5
-const y = d3.scale.linear()
-  .rangeRound([height, 0]);
+const y = d3.scaleLinear()
+  .range([height, 0]);
  
 
 //this shows the actualy text of the scale.
-const xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom");
+// const xAxis = d3.svg.axis()
+//   .scale(x)
+//   .orient("bottom");
+
+// x.domain(dataStackLayout[0].map(function (d) {
+//   return d.x;
+// }));
 
 //this shows the actualy text of the scale.
-const yAxis = d3.svg.axis()
-  .scale(y)
-  .orient("left");
+// const yAxis = d3.svg.axis()
+//   .scale(y)
+//   .orient("left");
 
-x.domain(dataStackLayout[0].map(function (d) {
-  return d.x;
-}));
-
- //nice rounds numbers well. d3 function only
- //https://d3indepth.com/scales/
- //y0 within dataStackLayout is like "where you are starting on the y axis", y is then how much more you are going
-
-
+ 
 y.domain([0,
   d3.max(dataStackLayout[dataStackLayout.length - 1],
-          function (d) { return d.y0 + d.y;})
+    function (d) { return d.y0 + d.y;})
   ])
 .nice();
- 
+
+
+const x = d3.scaleBand()
+.range([0, width])
+.domain(dataStackLayout[0].map(function (d) {
+  return d.x;
+}))
+.padding(0.4)
+
+// const yScale = d3.scaleLinear()
+// .range([height, 0])
+// .domain([0, 100]);
+
+// vertical grid lines
+// const makeXLines = () => d3.axisBottom()
+//   .scale(xScale)
+
+// const makeYLines = () => d3.axisLeft()
+// .scale(yScale)
+
+svg.append('g')
+.attr('transform', `translate(0, ${height})`)
+.call(d3.axisBottom(x));
+
+svg.append('g')
+.call(d3.axisLeft(y));
+
+
+// svg.append("g")
+//   .attr("class", "x-axis")
+//   .attr("transform", "translate(14," + height + ")")
+//   .call(xAxis);
+
+// svg.append("g")
+//   .attr("class", "y-axis")
+//   .attr("transform", "translate(20,0)")
+//   .call(yAxis);
+  
+//y axis label
+// svg.append('text')
+//   .attr('x', -height/2)
+//   .attr('y', -margin.right/2-5)
+//   .attr('transform', 'rotate(-90)')
+//   .attr('text-anchor', 'middle')
+//   .text('Energy Load (kBtu/SF)')
+//   .style('font-weight', 'bold')
+
+
+//x axis label
+// svg.append('text')
+//   .attr('x', width / 2 + margin)
+//   .attr('y', 40)
+//   .attr('text-anchor', 'middle')
+//   .text('Most loved programming languages in 2018')
+
+
 const layer = svg.selectAll(".stack")
   .data(dataStackLayout)
   .enter().append("g")
@@ -113,8 +152,6 @@ const layer = svg.selectAll(".stack")
   .style("fill", function (d,i) {
       return legendLabel[i].color;
   });
- 
-
   
 layer.selectAll("rect")
   //for some reason, by the time you get here, the first time you run this, you get the dataStackLayout[0]
@@ -145,33 +182,7 @@ layer.selectAll("rect")
     tooltip.select('text').text(`${d.x}: ${d.y}`);
   })
  
-svg.append("g")
-  .attr("class", "x-axis")
-  .attr("transform", "translate(14," + height + ")")
-  .call(xAxis);
-
-svg.append("g")
-  .attr("class", "y-axis")
-  .attr("transform", "translate(20,0)")
-  .call(yAxis);
   
-//y axis label
-svg.append('text')
-  .attr('x', -height/2)
-  .attr('y', -margin.right/2-5)
-  .attr('transform', 'rotate(-90)')
-  .attr('text-anchor', 'middle')
-  .text('Energy Load (kBtu/SF)')
-  .style('font-weight', 'bold')
-  
-//x axis label
-// svg.append('text')
-//   .attr('x', width / 2 + margin)
-//   .attr('y', 40)
-//   .attr('text-anchor', 'middle')
-//   .text('Most loved programming languages in 2018')
-
-
 // Draw legend
 const legend = svg.selectAll(".legend")
   .data(legendLabel)
