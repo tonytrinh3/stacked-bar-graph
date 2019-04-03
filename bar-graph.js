@@ -9,33 +9,11 @@ const loadData = [
   
 ];
 
+
+
 //change this will change order?
-// const valueChoose = ['plugLoads','lighting','heating','hotWater','cooling','pumps','fans','heatRejection', 'cooking'];
 const valueChoose = ['hotWater', 'heating','heatRejection', 'lighting','plugLoads','pumps','cooling' ,'fans','cooking'];
 
-// const legendLabel = [
-//   {label: 'Plug Loads', color: 'rgb(78,71,157)'},
-//   {label: 'Lighting', color: 'rgb(254,182,38)'},
-//   {label: 'Heating', color: 'rgb(175, 146, 157)'},
-//   {label: 'Hot Water', color: 'rgb(145,66,30)'},
-//   {label: "Cooling", color: 'rgb(129, 164, 205)'},
-//   {label: "Pumps", color: 'rgb(103,113,48)'},
-//   {label: 'Fans', color: 'rgb(175, 189, 33)'},
-//   {label: 'Heat Rejection', color: 'rgb(62, 124, 177)'},
-//   {label: 'Cooking', color: 'rgb(0, 120, 160)'}
-// ];
-
-// const legendLabel = [
-//   {label: 'Hot Water', color: '#BF3100'},
-//   {label: 'Heating', color: '#D76A03'},
-//   {label: 'Heat Rejection', color: '#E57C04'},
-//   {label: 'Cooking', color: '#EC9F05'},
-//   {label: 'Lighting', color: '#F5BB00'},
-//   {label: 'Plug Loads', color: '#FEFCAD'},
-//   {label: "Pumps", color: '#AFBD21'},
-//   {label: 'Fans', color: '#DBD053'},
-//   {label: "Cooling", color: 'rgb(129, 164, 205)'}
-// ];
 
 const legendLabel = [
   {label: 'Hot Water', color: '#E53935'},
@@ -57,105 +35,63 @@ const margin = {top: 20, right: 50, bottom: 30, left: 50},
 const svg = d3.select(".graph").append("svg")
   .attr("width", width + margin.left + margin.right + 100 )
   .attr("height", height + margin.top + margin.bottom)
-  //you don't really need this. this moves the graph to the middle...
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-//transforms loadData into data that we can read to make graph
-
-const dataIntermediate = valueChoose.map(function(c) {
-  return  loadData.map( function(d) {
-    return {x: d.design, y: d[c]}
-    })
-});
 
 
-const dataStackLayout = d3.layout.stack()(dataIntermediate);
 
-const x = d3.scale.ordinal()
-  .rangeRoundBands([0, width], .35);
- 
-  //d3.scaleLinear() in v4 and v5
-const y = d3.scale.linear()
-  .rangeRound([height, 0]);
+const stack = d3.stack()
+  .keys(valueChoose)
+  .order(d3.stackOrderNone)
+  .offset(d3.stackOffsetNone);
+
+const dataStackLayout = stack(loadData);
+
+
+const y = d3.scaleLinear()
+  .range([height, 0]);
  
 
-//this shows the actualy text of the scale.
-const xAxis = d3.svg.axis()
-  .scale(x)
-  .orient("bottom");
 
-//this shows the actualy text of the scale.
-const yAxis = d3.svg.axis()
-  .scale(y)
-  .orient("left");
-
-x.domain(dataStackLayout[0].map(function (d) {
-  return d.x;
-}));
-
- //nice rounds numbers well. d3 function only
- //https://d3indepth.com/scales/
- //y0 within dataStackLayout is like "where you are starting on the y axis", y is then how much more you are going
-
-
+ 
 y.domain([0,
   d3.max(dataStackLayout[dataStackLayout.length - 1],
-          function (d) { return d.y0 + d.y;})
+    function (d) { return d[1];})
   ])
 .nice();
- 
-const layer = svg.selectAll(".stack")
-  .data(dataStackLayout)
-  .enter().append("g")
-  .attr("class", "stack")
-  //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
-  .style("fill", function (d,i) {
-      return legendLabel[i].color;
-  });
- 
 
-  
-layer.selectAll("rect")
-  //for some reason, by the time you get here, the first time you run this, you get the dataStackLayout[0]
-  .data(function (d) {
-      return d;
-  })
-  .enter().append("rect")
-  .attr("x", function (d) {
-      return x(d.x);
-  })
-  .attr("y", function (d) { // https://github.com/d3/d3-3.x-api-reference/blob/master/Stack-Layout.md
-      return y(d.y + d.y0);
-  })
-  .attr("height", function (d) {
-      return y(d.y0) - y(d.y + d.y0);
-  })
-  .attr("width", x.rangeBand())
-  .on('mouseover', function(){
-    tooltip.style('display',null);
-  })
-  .on('mouseout',function(){
-    tooltip.style('display','none');
-  })
-  .on('mousemove', function(d){
-    const xPosition = d3.mouse(this)[0]-15;
-    const yPosition = d3.mouse(this)[1]-25;
-    tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
-    tooltip.select('text').text(`${d.y}`);
-  })
- 
-svg.append("g")
-  .attr("class", "x-axis")
-  .attr("transform", "translate(14," + height + ")")
-  .call(xAxis);
 
-svg.append("g")
-  .attr("class", "y-axis")
-  .attr("transform", "translate(20,0)")
-  .call(yAxis);
-  
-//y axis label
+const x = d3.scaleBand()
+  .range([0, width])
+  .padding(0.35);
+
+x.domain(dataStackLayout[0].map(function (d) {
+  return d.data.design;
+}))
+
+
+svg.append('g')
+.attr("class", "axis")
+.attr('transform', `translate(0, ${height})`)
+.call(d3.axisBottom(x));
+
+svg.append('g')
+.call(d3.axisLeft(y));
+
+  // svg.append("g")
+  //     .attr("class", "axis")
+  //     .call(d3.axisLeft(y).ticks(null, "s"))
+  //   .append("text")
+  //     .attr("x", 2)
+  //     .attr("y", y(y.ticks().pop()) + 0.5)
+  //     .attr("dy", "0.32em")
+  //     .attr("fill", "#000")
+  //     .attr("font-weight", "bold")
+  //     .attr("text-anchor", "start");
+
+
+// y axis label
 svg.append('text')
   .attr('x', -height/2)
   .attr('y', -margin.right/2-5)
@@ -163,7 +99,8 @@ svg.append('text')
   .attr('text-anchor', 'middle')
   .text('Energy Load (kBtu/SF)')
   .style('font-weight', 'bold')
-  
+
+
 //x axis label
 // svg.append('text')
 //   .attr('x', width / 2 + margin)
@@ -172,6 +109,55 @@ svg.append('text')
 //   .text('Most loved programming languages in 2018')
 
 
+const layer = svg.selectAll(".stack")
+  .data(dataStackLayout)
+  .enter().append("g")
+  .attr("class", "stack")
+  //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
+  .style("fill", function (d,i) {
+      return legendLabel[i].color;
+  });
+  
+layer.selectAll("rect")
+  //for some reason, by the time you get here, the first time you run this, you get the dataStackLayout[0]
+  .data(function (d) {
+      return d;
+  })
+  .enter().append("rect")
+  .attr("x", function (d) {
+      return x(d.data.design);
+  })
+  //this is needed here in order to get the bar going from bottom to top
+  .attr('y', function(d){
+    return height;
+  })
+  .attr("width", x.bandwidth())
+  .transition()
+  .duration(800)
+  .ease(d3.easePolyOut)
+  .attr("y", function (d) { // https://bl.ocks.org/mjfoster83/7c9bdfd714ab2f2e39dd5c09057a55a0
+      return y(d[1]);
+  })
+  .attr("height", function (d) {
+      return y(d[0]) - y(d[1]);
+  })
+  
+  // .on('mouseover', function(){
+  //   tooltip.style('display',null);
+  // })
+  // .on('mouseout',function(){
+  //   tooltip.style('display','none');
+  // })
+  // .on('mousemove', function(d){
+  //   const xPosition = d3.mouse(this)[0]-15;
+  //   const yPosition = d3.mouse(this)[1]-25;
+  //   const number = d[1]-d[0];
+
+  //   tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
+  //   tooltip.select('text').text(`${number}`);
+  // })
+ 
+  
 // Draw legend
 const legend = svg.selectAll(".legend")
   .data(legendLabel)
@@ -203,15 +189,15 @@ const tooltip = svg.append('g')
   .style('display','none');
   
 tooltip.append('rect')
-  .attr('width', 30)
+  .attr('width', 90)
   .attr('height',20)
   .attr('fill','white')
   .style('opacity',0.5);
   
 tooltip.append('text')
-  .attr('x', 15)
+  .attr('x', 8)
   .attr('dy','1.2em')
-  .style('text-anchor','middle')
+  .style('text-anchor','left')
   .attr('font-size','12px')
   .attr('font-weight','bold');
 

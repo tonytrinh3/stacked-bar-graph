@@ -1,0 +1,102 @@
+.paper-body{
+    font-family: 'Roboto', sans-serif;
+    margin: 5% 15%;
+    color: #3f3f3f;
+}
+
+/*#afbd21 is lime green  #0078a0 is that blue*/
+h3, h2 {
+    font-family: 'Roboto', sans-serif;
+    text-decoration: underline;
+
+}
+
+
+
+table {
+  border-collapse: collapse;
+  table-layout: auto;
+  margin: 20px auto 0 auto;
+  width: 60%;
+
+}
+
+th {
+  padding: 10px 10px;
+  opacity: 0.8;
+  border-bottom: 3px solid #BDBDBD;
+}
+
+
+
+tr {
+  text-align: center;
+  width: 100%;
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #BDBDBD;
+}
+
+
+/* tr:hover{
+  background-color: #BDBDBD;
+  color: white;
+} */
+
+
+td{
+  width:20%;
+}
+
+.label {
+  text-align:left;
+  padding: 10px 10px;
+  width:15%;
+}
+
+/*for the graph */
+
+.graph svg {
+    font-family: 'Roboto', sans-serif;
+    margin: 20px auto;
+    display: block;
+}
+
+.x-axis .domain{
+  fill: #BDBDBD;
+}
+
+.y-axis{
+  fill: #BDBDBD;
+}
+
+/*tick is probably a class auto filled by d3 when using d3 function to create axis*/
+.x-axis .tick {
+  fill: black;
+  overflow: auto;
+}
+
+.y-axis .tick {
+  fill: black;
+  overflow: auto;
+}
+
+/*text color needs to be fill bc it is svg?*/
+.legend{
+  fill: black;
+  display: inline-block;
+
+}
+/*for the table below the graph*/
+
+.units-table{
+  border-bottom: none;
+  padding: 1px 1px;
+  text-decoration: underline ;
+
+}
+
+.table-total{
+  font-weight: bold;
+}

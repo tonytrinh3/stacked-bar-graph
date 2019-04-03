@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.chart-container {
+    position: relative;
+}
+
+.chart-container .controls {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+}
+
+.chart path,
+.chart line,
+.chart rect {
+    shape-rendering: crispEdges;
+}
+
+.chart .bar {
+    fill: steelblue;
+}
+
+.chart .baseline {
+    fill: none;
+    stroke: black;
+}
+
+</style>
+<body>
+
+<div class="chart-container js-chart-container">
+    <form class="controls js-controls">
+        <label><button type="button" value="height">Animate height</button></label>
+        <label><button type="button" value="y">Animate y</button></label>
+        <label><button type="button" value="both">Animate y and height</button></label>
+    </form>
+    <svg class="chart js-chart"></svg>
+</div>
+
+<script src="http://d3js.org/d3.v4.min.js"></script>
+<script type="text/javascript">
+"use strict";
+
+var margin = { top: 70, right: 10, bottom: 200, left: 10 },
+    containerWidth = document.querySelector(".js-chart-container").clientWidth,
+    containerHeight = 500,
+    width = containerWidth - margin.left - margin.right,
+    height = containerHeight - margin.top - margin.bottom,
+    animationDuration = 400,
+    barWidth = 40,
+    barX = (width - barWidth) / 2,
+    t = d3.transition().duration(400),
+    toggling = true;
+
+var buttons = Array.from(document.querySelectorAll('.js-controls button'));
+
+var svg = d3.select(".js-chart")
+    .attr("width", containerWidth)
+    .attr("height", containerHeight);
+
+var mainContainer = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var bar = mainContainer.append("rect")
+    .attr("class", "bar")
+    .attr("x", barX)
+    .attr("y", 0)
+    .attr("width", barWidth)
+    .attr("height", height);
+
+mainContainer.append("line")
+    .attr("class", "baseline")
+    .attr("x1", 0)
+    .attr("x2", width)
+    .attr("y1", height)
+    .attr("y2", height);
+
+function hideBar(togglingMode) {
+    var transition = bar.transition().duration(animationDuration);
+
+    switch (togglingMode) {
+    case "height":
+        transition.attr("height", 0);
+        break;
+    case "y":
+        transition.attr("y", height);
+        break;
+    case "both":
+        transition.attr("y", height).attr("height", 0);
+        break;
+    }
+}
+
+function showBar(togglingMode) {
+    var transition = bar.transition().duration(animationDuration);
+
+    switch (togglingMode) {
+    case "height":
+        transition.attr("height", height);
+        break;
+    case "y":
+        transition.attr("y", 0);
+        break;
+    case "both":
+        transition.attr("y", 0).attr("height", height);
+        break;
+    }
+}
+
+function disableButtonsOtherThan(thisButton) {
+    buttons.forEach(function(button) {
+        button.disabled = button != thisButton;
+    });
+}
+
+function enableAllButtons() {
+    buttons.forEach(function(button) {
+        button.disabled = false;
+    });
+}
+
+function toggleBar(event) {
+    var button = event.target;
+
+    if (toggling) {
+        hideBar(button.value);
+        disableButtonsOtherThan(button);
+    } else {
+        showBar(button.value);
+        enableAllButtons();
+    }
+    toggling = !toggling;
+}
+
+document.querySelector(".js-controls").addEventListener("click", toggleBar);
+
+</script>
+</body>

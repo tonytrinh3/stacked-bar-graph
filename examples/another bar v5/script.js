@@ -113,57 +113,57 @@ const sample = [
     .attr('y', (g) => yScale(g.value))
     .attr('height', (g) => height - yScale(g.value))
     .attr('width', xScale.bandwidth())
-    // .on('mouseenter', function (actual, i) {
-    //   d3.selectAll('.value')
-    //     .attr('opacity', 0)
+    .on('mouseenter', function (actual, i) {
+      d3.selectAll('.value')
+        .attr('opacity', 0)
 
-    //   d3.select(this)
-    //     .transition()
-    //     .duration(300)
-    //     .attr('opacity', 0.6)
-    //     .attr('x', (a) => xScale(a.language) - 5)
-    //     .attr('width', xScale.bandwidth() + 10)
+      d3.select(this)
+        .transition()
+        .duration(300)
+        .attr('opacity', 0.6)
+        .attr('x', (a) => xScale(a.language) - 5)
+        .attr('width', xScale.bandwidth() + 10)
 
-    //   const y = yScale(actual.value)
+      const y = yScale(actual.value)
 
-    //   line = chart.append('line')
-    //     .attr('id', 'limit')
-    //     .attr('x1', 0)
-    //     .attr('y1', y)
-    //     .attr('x2', width)
-    //     .attr('y2', y)
+      line = chart.append('line')
+        .attr('id', 'limit')
+        .attr('x1', 0)
+        .attr('y1', y)
+        .attr('x2', width)
+        .attr('y2', y)
 
-    //   barGroups.append('text')
-    //     .attr('class', 'divergence')
-    //     .attr('x', (a) => xScale(a.language) + xScale.bandwidth() / 2)
-    //     .attr('y', (a) => yScale(a.value) + 30)
-    //     .attr('fill', 'white')
-    //     .attr('text-anchor', 'middle')
-    //     .text((a, idx) => {
-    //       const divergence = (a.value - actual.value).toFixed(1)
+      barGroups.append('text')
+        .attr('class', 'divergence')
+        .attr('x', (a) => xScale(a.language) + xScale.bandwidth() / 2)
+        .attr('y', (a) => yScale(a.value) + 30)
+        .attr('fill', 'white')
+        .attr('text-anchor', 'middle')
+        .text((a, idx) => {
+          const divergence = (a.value - actual.value).toFixed(1)
           
-    //       let text = ''
-    //       if (divergence > 0) text += '+'
-    //       text += `${divergence}%`
+          let text = ''
+          if (divergence > 0) text += '+'
+          text += `${divergence}%`
 
-    //       return idx !== i ? text : '';
-    //     })
+          return idx !== i ? text : '';
+        })
 
-    // })
-    // .on('mouseleave', function () {
-    //   d3.selectAll('.value')
-    //     .attr('opacity', 1)
+    })
+    .on('mouseleave', function () {
+      d3.selectAll('.value')
+        .attr('opacity', 1)
 
-    //   d3.select(this)
-    //     .transition()
-    //     .duration(300)
-    //     .attr('opacity', 1)
-    //     .attr('x', (a) => xScale(a.language))
-    //     .attr('width', xScale.bandwidth())
+      d3.select(this)
+        .transition()
+        .duration(300)
+        .attr('opacity', 1)
+        .attr('x', (a) => xScale(a.language))
+        .attr('width', xScale.bandwidth())
 
-    //   chart.selectAll('#limit').remove()
-    //   chart.selectAll('.divergence').remove()
-    // })
+      chart.selectAll('#limit').remove()
+      chart.selectAll('.divergence').remove()
+    })
 
   barGroups 
     .append('text')

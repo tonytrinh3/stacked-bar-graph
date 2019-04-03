@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    .chart {
+      background-color: #f6fafc;
+    }
+    .chart svg {
+      background: white;
+      border: 1px solid #ddd;
+    }
+    .bar {
+      fill: #aaa;
+      opacity: 0.5;
+      cursor: pointer;
+    }
+    .month-label {
+      fill: #111;
+      font-size: 15px;
+      opacity: 0.6;
+    }
+    .bar.active,
+    .month-label.active {
+      fill: #0f6ba8;
+      opacity: 1;
+      transition: opacity, fill 140ms ease-in;
+    }
+    .overlay {
+      fill: transparent;
+    }
+    .tick, .domain {
+      pointer-events: none;
+    }
+    .year {
+      font-family: Helvetica, Arial;
+      font-weight: bold;
+      fill: #444;
+      text-anchor: start
+    }
+    text {
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chart"></div>
+
+  <script>
+    const margin = { top: 25, right: 25, bottom: 60, left: 70 };
+    const width = 1100 - margin.left - margin.right;
+    const height = 300 - margin.top - margin.bottom;
+    
+    const fullWidth = width + margin.left + margin.right;
+    const fullHeight = height + margin.top + margin.bottom;
+
+    const data = [
+      { amount: 2900, month: '06-2016' },
+      { amount: 2090, month: '07-2016' },
+      { amount: 870, month: '08-2016' },
+      { amount: 2340, month: '09-2016' },
+      { amount: 1880, month: '10-2016' },
+      { amount: 960, month: '11-2016' },
+      { amount: 340, month: '12-2016' },
+      { amount: 2180, month: '01-2017' },
+      { amount: 1870, month: '02-2017' },
+      { amount: 434, month: '03-2017' },
+      { amount: 340, month: '04-2017' },
+      { amount: 940, month: '05-2017' }
+    ];
+
+    const svg = d3.select('.chart')
+      .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+				.call(responsivefy)
+      .append('g')
+        .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+		const parse = d3.timeParse('%m-%Y');
+
+    data.forEach(d => (d.date = parse(d.month)));
+
+    const xScale = d3.scaleBand()
+    	.padding(0.1)
+    	.domain(data.map(d => d.date))
+    	.range([0, width]);
+
+    const yScale = d3.scaleLinear()
+    	.domain([0, d3.max(data, d => d.amount)])
+    	.range([height, 0]);
+    	
+    svg.selectAll('.bar')
+    	.data(data)
+    	.enter()
+    	.append('rect')
+    	.attr('class', 'bar')
+    	.attr('x', d => xScale(d.date))
+    	.attr('y', d => height)
+    	.attr('width', xScale.bandwidth())
+    	.transition()
+      .duration(600)
+      .ease(d3.easePolyOut)
+	    .attr('y', d => yScale(d.amount))
+    	.attr('height', d => height - yScale(d.amount))
+    	.each((d, i, a) =>
+        d3.select(a[i])
+        	.attr('data-key', d.date.toISOString()));
+
+    // svg.selectAll('.overlay')
+    // 	.data(data)
+    // 	.enter()
+    // 	.append('rect')
+    // 	.attr('class', 'overlay')
+    // 	.attr('x', d => xScale(d.date))
+    // 	.attr('y', 0)
+    // 	.attr('width', xScale.bandwidth())
+    // 	.attr('height', height + 30)
+    // 	.attr('fill', 'transparent')
+    // 	.style('cursor', 'pointer')
+    // 	.on('mouseover', d =>
+    //      d3.selectAll(`[data-key="${d.date.toISOString()}"]`)
+    //      	.classed('active', true))
+    // 	.on('mouseout', d =>
+    //      d3.selectAll(`[data-key="${d.date.toISOString()}"]`)
+    //      	.classed('active', false));
+
+    const yAxis = d3.axisLeft(yScale.nice())
+    	.tickFormat(d3.format('$,.0f'))
+    	.ticks(4);
+
+   	svg.append('g')
+    	.call(yAxis);
+
+    const format = window.innerWidth < 960 ? '%b' : '%B';
+
+    const xAxis = d3.axisBottom(xScale)
+    	.tickFormat(d3.timeFormat(format));
+
+    const xAxisGroup = svg.append('g')
+    	.attr('transform', `translate(0, ${height})`)
+      .call(xAxis);
+
+    xAxisGroup
+      .selectAll('text')
+    	.attr('class', 'month-label');
+
+    xAxisGroup
+    	.selectAll('text')
+    	.each((d, i, a) => {
+      	d3.select(a[i])
+        	.attr('data-key', d.toISOString());
+        if (d.getMonth() === 0) {
+          svg.append('g')
+          	.attr('transform',
+              `translate(${i * xScale.step() + 10}, ${height + 45})`)
+          	.append('text')
+          	.text(`${d.getFullYear()}`)
+          	.attr('class', 'year');
+        }
+    	});
+
+
+
+    ///////
+
+
+    function responsivefy(svg) {
+      // get container + svg aspect ratio
+      var container = d3.select(svg.node().parentNode),
+          width = parseInt(svg.style("width")),
+          height = parseInt(svg.style("height")),
+          aspect = width / height;
+
+      // add viewBox and preserveAspectRatio properties,
+      // and call resize so that svg resizes on inital page load
+      svg.attr("viewBox", "0 0 " + width + " " + height)
+          .attr("preserveAspectRatio", "xMinYMid")
+          .call(resize);
+
+      // to register multiple listeners for same event type,
+      // you need to add namespace, i.e., 'click.foo'
+      // necessary if you call invoke this function for multiple svgs
+      // api docs: https://github.com/mbostock/d3/wiki/Selections#on
+      d3.select(window).on("resize." + container.attr("id"), resize);
+
+      // get width of container and resize svg to fit it
+      function resize() {
+          var targetWidth = parseInt(container.style("width"));
+          svg.attr("width", targetWidth);
+          svg.attr("height", Math.round(targetWidth / aspect));
+      }
+    }
+  </script>
+</body>
