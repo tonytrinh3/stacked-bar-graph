@@ -142,20 +142,21 @@ layer.selectAll("rect")
       return y(d[0]) - y(d[1]);
   })
   
-  // .on('mouseover', function(){
-  //   tooltip.style('display',null);
-  // })
-  // .on('mouseout',function(){
-  //   tooltip.style('display','none');
-  // })
-  // .on('mousemove', function(d){
-  //   const xPosition = d3.mouse(this)[0]-15;
-  //   const yPosition = d3.mouse(this)[1]-25;
-  //   const number = d[1]-d[0];
-
-  //   tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
-  //   tooltip.select('text').text(`${number}`);
-  // })
+//tooltip implemented
+layer.selectAll('rect')
+  .on('mouseover', function(){
+    tooltip.style('display',null);
+  })
+  .on('mouseout',function(){
+    tooltip.style('display','none');
+  })
+  .on('mousemove', function(d){
+    const xPosition = d3.mouse(this)[0]-15;
+    const yPosition = d3.mouse(this)[1]-25;
+    const number = d[1]-d[0];
+    tooltip.attr('transform', 'translate(' + xPosition + ',' + yPosition + ')');
+    tooltip.select('text').text(`${number.toFixed(1)}`);
+  })
  
   
 // Draw legend
@@ -189,15 +190,15 @@ const tooltip = svg.append('g')
   .style('display','none');
   
 tooltip.append('rect')
-  .attr('width', 90)
+  .attr('width', 30)
   .attr('height',20)
   .attr('fill','white')
   .style('opacity',0.5);
   
 tooltip.append('text')
-  .attr('x', 8)
+  .attr('x', 15)
   .attr('dy','1.2em')
-  .style('text-anchor','left')
+  .style('text-anchor','middle')
   .attr('font-size','12px')
   .attr('font-weight','bold');
 
