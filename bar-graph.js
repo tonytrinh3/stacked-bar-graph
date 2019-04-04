@@ -165,6 +165,26 @@ layer.selectAll('rect')
     tooltip.select('text').text(`${number.toFixed(1)}`);
   })
  
+
+  // Prep the tooltip bits, initial display is hidden
+  const tooltip = svg.append('g')
+  .attr('class', 'tooltip')
+  .style('display','none');
+
+  tooltip.append('rect')
+  .attr('width', 30)
+  .attr('height',20)
+  .attr('fill','white')
+  .style('opacity',0.5);
+
+  tooltip.append('text')
+  .attr('x', 15)
+  .attr('dy','1.2em')
+  .style('text-anchor','middle')
+  .attr('font-size','12px')
+  .attr('font-weight','bold');
+
+
 }
 
 // Draw legend
@@ -192,23 +212,6 @@ legend.append("text")
   .style('margin', '200px')
   
   
-// Prep the tooltip bits, initial display is hidden
-const tooltip = svg.append('g')
-  .attr('class', 'tooltip')
-  .style('display','none');
-  
-tooltip.append('rect')
-  .attr('width', 30)
-  .attr('height',20)
-  .attr('fill','white')
-  .style('opacity',0.5);
-  
-tooltip.append('text')
-  .attr('x', 15)
-  .attr('dy','1.2em')
-  .style('text-anchor','middle')
-  .attr('font-size','12px')
-  .attr('font-weight','bold');
 
 
 //activates bar graph when it reaches to .graph div
