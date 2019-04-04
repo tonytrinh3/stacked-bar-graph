@@ -31,15 +31,25 @@ const margin = {top: 20, right: 50, bottom: 30, left: 50},
   width = 800 - margin.left - margin.right,
   height = 500 - margin.top - margin.bottom;
 
+
+// $(window).on("scroll", function(){
+//   if($(".graph").scrollTop() === 110){
+//     $(window).off("scroll");
+//     something();
+//   }
+// })
  
+// const waypoint = new Waypoint({
+//   element: document.getElementsByClassName('graph'),
+//   handler: something()
+// })
+
+
 const svg = d3.select(".graph").append("svg")
   .attr("width", width + margin.left + margin.right + 100 )
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-
-
 
 const stack = d3.stack()
   .keys(valueChoose)
@@ -52,15 +62,11 @@ const dataStackLayout = stack(loadData);
 const y = d3.scaleLinear()
   .range([height, 0]);
  
-
-
- 
 y.domain([0,
   d3.max(dataStackLayout[dataStackLayout.length - 1],
     function (d) { return d[1];})
   ])
 .nice();
-
 
 const x = d3.scaleBand()
   .range([0, width])
@@ -108,39 +114,40 @@ svg.append('text')
 //   .attr('text-anchor', 'middle')
 //   .text('Most loved programming languages in 2018')
 
+const barRender = function(){
 
-const layer = svg.selectAll(".stack")
-  .data(dataStackLayout)
-  .enter().append("g")
-  .attr("class", "stack")
-  //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
-  .style("fill", function (d,i) {
-      return legendLabel[i].color;
-  });
-  
-layer.selectAll("rect")
-  //for some reason, by the time you get here, the first time you run this, you get the dataStackLayout[0]
-  .data(function (d) {
-      return d;
-  })
-  .enter().append("rect")
-  .attr("x", function (d) {
-      return x(d.data.design);
-  })
-  //this is needed here in order to get the bar going from bottom to top
-  .attr('y', function(d){
-    return height;
-  })
-  .attr("width", x.bandwidth())
-  .transition()
-  .duration(800)
-  .ease(d3.easePolyOut)
-  .attr("y", function (d) { // https://bl.ocks.org/mjfoster83/7c9bdfd714ab2f2e39dd5c09057a55a0
-      return y(d[1]);
-  })
-  .attr("height", function (d) {
-      return y(d[0]) - y(d[1]);
-  })
+  const layer = svg.selectAll(".stack")
+    .data(dataStackLayout)
+    .enter().append("g")
+    .attr("class", "stack")
+    //you need the d for some reason, removing d result in one color, d will give you multiple colors. maybe d is number of elements on data
+    .style("fill", function (d,i) {
+        return legendLabel[i].color;
+    });
+    
+  layer.selectAll("rect")
+    //for some reason, by the time you get here, the first time you run this, you get the dataStackLayout[0]
+    .data(function (d) {
+        return d;
+    })
+    .enter().append("rect")
+    .attr("x", function (d) {
+        return x(d.data.design);
+    })
+    //this is needed here in order to get the bar going from bottom to top
+    .attr('y', function(d){
+      return height;
+    })
+    .attr("width", x.bandwidth())
+    .transition()
+    .duration(800)
+    .ease(d3.easePolyOut)
+    .attr("y", function (d) { // https://bl.ocks.org/mjfoster83/7c9bdfd714ab2f2e39dd5c09057a55a0
+        return y(d[1]);
+    })
+    .attr("height", function (d) {
+        return y(d[0]) - y(d[1]);
+    })
   
 //tooltip implemented
 layer.selectAll('rect')
@@ -158,7 +165,8 @@ layer.selectAll('rect')
     tooltip.select('text').text(`${number.toFixed(1)}`);
   })
  
-  
+}
+
 // Draw legend
 const legend = svg.selectAll(".legend")
   .data(legendLabel)
@@ -201,6 +209,17 @@ tooltip.append('text')
   .style('text-anchor','middle')
   .attr('font-size','12px')
   .attr('font-weight','bold');
+
+
+//activates bar graph when it reaches to .graph div
+//https://github.com/imakewebthings/waypoints/issues/158
+//http://imakewebthings.com/waypoints/api/offset-option/#percentage
+$('.graph').waypoint(function(){
+  barRender();
+}, {
+  triggerOnce: true,
+  offset: 'bottom-in-view'
+})
 
 
 
