@@ -78,11 +78,12 @@ x.domain(dataStackLayout[0].map(function (d) {
 
 
 svg.append('g')
-.attr("class", "axis")
+.attr("class", "x-axis")
 .attr('transform', `translate(0, ${height})`)
 .call(d3.axisBottom(x));
 
 svg.append('g')
+.attr("class", "y-axis")
 .call(d3.axisLeft(y));
 
   // svg.append("g")
@@ -104,7 +105,8 @@ svg.append('text')
   .attr('transform', 'rotate(-90)')
   .attr('text-anchor', 'middle')
   .text('Energy Load (kBtu/SF)')
-  .style('font-weight', 'bold')
+  .attr('class','y-axis__label');
+
 
 
 //x axis label
@@ -157,7 +159,8 @@ layer.selectAll('rect')
   .on('mouseout',function(){
     tooltip.style('display','none');
   })
-  .on('mousemove', function(d){
+  .on('mousemove', function(d,i){
+    // console.log(d);
     const xPosition = d3.mouse(this)[0]-15;
     const yPosition = d3.mouse(this)[1]-25;
     const number = d[1]-d[0];

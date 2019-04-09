@@ -12,7 +12,6 @@ h3, h2 {
 }
 
 
-
 table {
   border-collapse: collapse;
   table-layout: auto;
@@ -26,7 +25,6 @@ th {
   opacity: 0.8;
   border-bottom: 3px solid #BDBDBD;
 }
-
 
 
 tr {
@@ -63,24 +61,29 @@ td{
     display: block;
 }
 
-.x-axis .domain{
-  fill: #BDBDBD;
+/* .x-axis .domain{
+
 }
 
 .y-axis{
-  fill: #BDBDBD;
-}
+
+} */
 
 /*tick is probably a class auto filled by d3 when using d3 function to create axis*/
-.x-axis .tick {
+/* .x-axis .tick {
   fill: black;
   overflow: auto;
+  font: 12px;
 }
 
 .y-axis .tick {
   fill: black;
   overflow: auto;
 }
+
+.y-axis__label{
+
+} */
 
 /*text color needs to be fill bc it is svg?*/
 .legend{
